@@ -12,8 +12,12 @@
       </div>
     </div>
     <div>
+      <% if(!currUser){ %>
       <a class="btn btn-outline-danger mb-3" href="/signup">Register</a>
       <a class="btn btn-dark edit-btn mb-3" href="/login">Login</a>
+      <% } else { %>
+      <a class="btn btn-dark mb-3" href="/logout">Logout</a>
+      <% } %>
     </div>
   </div>
 </nav>

@@ -1,0 +1,162 @@
+<% layout("/layouts/boilerPlate") %>
+    <script>
+        const mapToken = "<%=process.env.MAP_TOKEN%>";
+        const listing = <%-JSON.stringify(listing) %>;
+    </script>
+    <div class="row mt-3">
+        <div class="col-8 offset-2">
+            <b>
+                <%= listing.title %>
+            </b>
+        </div>
+        <div class="listing-card card col-6 offset-2 show-card">
+            <img src="<%=listing.image.url%>" class="card-img-top show-img" alt="listing image">
+            <div class="card-body">
+                <p class="card-text">Owned By <i>
+                        <%= listing.owner.username %>
+                    </i></p>
+                <p class="card-text">
+                    <%= listing.description %>
+                </p>
+                <p class="card-text">&#8377; <%= listing.price.toLocaleString("en-IN") %>/night</p>
+                <p class="card-text">
+                    <%= listing.location %> %>
+                </p>
+                <p class="card-text">
+                    <%= listing.country %>
+                </p>
+
+            </div>
+            <button class="btn-search mt-3" onclick="openBookingForm(listing.title)" style="width: max-content; padding: 0.7rem;">
+                <i class="fa-solid fa-bed"></i> Book Now
+            </button>
+        </div>
+        <div class="modal fade" id="bookingModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Book Room</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="bookingForm">
+                            <input type="hidden" id="roomName">
+                            <div class="mb-3">
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Check-in</label>
+                                <input type="date" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Check-out</label>
+                                <input type="date" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Guests</label>
+                                <input type="number" class="form-control" min="1" required>
+                            </div>
+                            <button type="submit" class="btn btn-danger">Confirm Booking</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <br>
+        <% if(currUser && currUser._id.equals(listing.owner._id)) {%>
+            <div class="d-flex gap-3 mt-3 mb-3 col-8 offset-2">
+                <a href="/listings/<%=listing._id%>/edit" class="btn btn-dark edit-btn">Edit</a>
+
+                <form action="/listings/<%=listing._id%>?_method=DELETE" method="post">
+                    <button class="btn btn-dark">Delete</button>
+                </form>
+            </div>
+            <% } %>
+                <div class="col-8 offset-2 mb-3 ">
+                    <% if(currUser) {%>
+                        <hr />
+                        <h3>Leave a Review</h3>
+                        <form action="/listings/<%=listing._id%>/reviews" method="post" novalidate
+                            class="needs-validation">
+                            <div class="mb-3 mt-3">
+                                <label for="rating" class="form-label">Rating</label>
+
+                                <fieldset class="starability-basic">
+                                    <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]"
+                                        value="1" checked aria-label="No rating." />
+
+                                    <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                                    <label for="first-rate1" title="Terrible">1 star</label>
+                                    <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                                    <label for="first-rate2" title="Not good">2 stars</label>
+                                    <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                                    <label for="first-rate3" title="Average">3 stars</label>
+                                    <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                                    <label for="first-rate4" title="Very good">4 stars</label>
+                                    <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                                    <label for="first-rate5" title="Amazing">5 stars</label>
+                                </fieldset>
+                            </div>
+
+
+
+
+                            <div class="mb-3 mt-3">
+                                <label for="comment" class="form-label">Comments</label>
+                                <textarea name="review[comment]" id="comment" rows="5" cols="30" class="form-control"
+                                    required></textarea>
+                                <div class="invalid-feedback">Add Comments</div>
+                            </div>
+                            <button class="btn btn-outline-dark">Submit</button>
+                        </form>
+                        <hr />
+                        <% } %>
+                            <% if(listing.review.length>0){ %>
+                                <p><b>All Reviews</b></p>
+                                <div class="row">
+                                    <% for(review of listing.review){ %>
+                                        <div class="card col-5 ms-3 mb-3">
+                                            <div class="card-body">
+                                                <h5 class="card-title">
+                                                    <%= review.author.username %>
+                                                </h5>
+                                                <p class="starability-result" data-rating="<%= review.rating %>"></p>
+                                                <p class="card-text">
+                                                    <%= review.comment %>
+                                                </p>
+                                            </div>
+                                            <% if(currUser && currUser._id.equals(review.author._id)) {%>
+                                                <form method="post"
+                                                    action="/listings/<%=listing._id%>/reviews/<%=review._id%>?_method=DELETE"
+                                                    class="mb-3">
+                                                    <button class="btn btn-sm btn-dark">Delete</button>
+                                                </form>
+                                                <% } %>
+                                        </div>
+                                        <% } %>
+                                </div>
+                                <% } %>
+                </div>
+                <div class="col-6 offset-2 mb-3">
+                    <h3>Where you'll be</h3>
+                    <div id="map"></div>
+                </div>
+
+    </div>
+    <script src="/js/map.js"></script>
+    <script>
+        function openBookingForm(room) {
+            document.getElementById("roomName").value = room;
+            new bootstrap.Modal(document.getElementById("bookingModal")).show();
+        }
+
+        document.getElementById("bookingForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            alert(" Booking confirmed for: " + document.getElementById("roomName").value);
+            bootstrap.Modal.getInstance(document.getElementById("bookingModal")).hide();
+        });
+    </script>

@@ -134,3 +134,31 @@ body {
     padding: 0.5rem 1rem 0.5rem 1rem !important;
     
 }
+@media (max-width: 767.98px) {
+  .navbar .navbar-collapse {
+    position: absolute;     /* navbar ke neeche latak jayega */
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;       /* white background */
+    z-index: 1050;          /* content ke upar rahe */
+    border-bottom: 1px solid rgba(0,0,0,.1);
+    box-shadow: 0 8px 16px rgba(0,0,0,.1);
+  }
+
+  .navbar-nav .nav-link {
+    padding: 0.75rem 1rem;  /* thoda spacing clear dikhe */
+  }
+
+  /* Ensure navbar container is positioning context */
+  .navbar .container-fluid {
+    position: relative;
+  }
+}
+@media (max-width: 767.98px) {
+  #map {
+    height: 250px;      /* chhota height */
+    width: 90%;         /* thoda side gap */
+    margin: 0 auto;     /* center align */
+  }
+}

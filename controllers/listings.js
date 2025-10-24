@@ -58,6 +58,7 @@ module.exports.addNewListing = async (req, res, next) => {
     newListing.owner = req.user._id;
     newListing.image = { url, filename };
     newListing.geometry = response.body.features[0].geometry;
+    newListing.category = req.body.listing.category;
     await newListing.save();
     req.flash("success", "New listing added successfully");
     res.redirect("/listings");
@@ -88,4 +89,33 @@ module.exports.deleteListing = async (req, res) => {
     await Listing.findByIdAndDelete(id);
     req.flash("success", "Listing deleted successfully");
     res.redirect("/listings");
+}
+
+module.exports.searchListings = async (req, res) => {
+    const { query } = req.query;
+    try {
+    const allListings = await Listing.find({
+      $or: [
+        { title: { $regex: query, $options: 'i' } },
+        { country: { $regex: query, $options: 'i' } },
+        { location: { $regex: query, $options: 'i' } }
+      ]
+    });
+
+    res.render('listings/index', { allListings, query });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error performing search');
+  }
+}
+
+module.exports.filterListings = async (req, res) => {
+  const { category } = req.params;
+  try {
+    const allListings = await Listing.find({ category: category });
+    res.render('listings/index', { allListings });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error filtering listings');
+  }
 }

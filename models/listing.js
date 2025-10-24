@@ -22,6 +22,7 @@ const listingSchema = new Schema({
             ref: "Review"
         }
     ],
+    category:String,
     owner:
     {
         type: Schema.Types.ObjectId,

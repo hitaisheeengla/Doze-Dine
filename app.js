@@ -19,21 +19,21 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 
-// const db_url = process.env.MONGO_ATLAS;
+const db_url = process.env.MONGO_ATLAS;
 
-// main().then(() => { console.log("connected to DB") }).catch(err => console.log(err));
-
-// async function main() {
-//     await mongoose.connect(db_url);
-// }
-
-main().then(()=>{console.log("connected to DB")}).catch(err => console.log(err));
+main().then(() => { console.log("connected to DB") }).catch(err => console.log(err));
 
 async function main() {
-  await mongoose.connect('mongodb://127.0.0.1:27017/wanderlust');
-
-  // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
+    await mongoose.connect(db_url);
 }
+
+// main().then(()=>{console.log("connected to DB")}).catch(err => console.log(err));
+
+// async function main() {
+//   await mongoose.connect('mongodb://127.0.0.1:27017/wanderlust');
+
+//   // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
+// }
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
@@ -43,7 +43,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 
 
 const store = MongoStore.create({
-    mongoUrl: 'mongodb://127.0.0.1:27017/wanderlust',
+    mongoUrl: db_url,
     touchAfter: 24 * 60 * 60,// time period in seconds
     crypto: {
         secret: process.env.SECRET,

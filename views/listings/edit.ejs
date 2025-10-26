@@ -2,7 +2,8 @@
     <div class="row mt-3">
         <div class="col-8 offset-2">
             <h3>Update Listing</h3>
-            <form action="/listings/<%=listing._id%>?_method=PUT" method="post" class="needs-validation" novalidate enctype="multipart/form-data">
+            <form action="/listings/<%=listing._id%>?_method=PUT" method="post" class="needs-validation" novalidate
+                enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
                     <input type="text" name="listing[title]" value="<%=listing.title %>" class="form-control" required>
@@ -22,11 +23,29 @@
                     <img src="<%=orginalImgUrl %>" alt="listing image">
                 </div>
 
-                <div class="mb-3">
-                    <label for="image" class="form-label">Image</label>
-                    <input type="file" name="listing[image]" class="form-control" >
-                    <div class="invalid-feedback">
-                        Image must be valid.
+                <div class="row">
+                    <div class="mb-3 col-md-6">
+                        <label for="image" class="form-label">Image</label>
+                        <input type="file" name="listing[image]" class="form-control">
+                        <div class="invalid-feedback">
+                            Image must be valid.
+                        </div>
+                    </div>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="category" class="form-label">Category</label>
+                        <select name="listing[category]" class="form-select"  required>
+                            <option value="<%=listing.category %>" selected ><%=listing.category %></option>
+                            <option value="Trending">Trending</option>
+                            <option value="Rooms">Rooms</option>
+                            <option value="Iconic Cities">Iconic Cities</option>
+                            <option value="Mountains">Mountains</option>
+                            <option value="Castles">Castles</option>
+                            <option value="Amazing Pools">Amazing Pools</option>
+                            <option value="Camping">Camping</option>
+                            <option value="Farms">Farms</option>
+                            <option value="Arctic">Arctic</option>
+                        </select>
                     </div>
                 </div>
                 <div class="row">

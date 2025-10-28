@@ -94,6 +94,10 @@ app.use((req, res, next) => {
 //     let registeredUser =await User.register(fakeUser,"chotupassword");
 //     res.send(registeredUser);
 // } )
+
+app.get("/", (req, res) => {
+    res.redirect("/listings");
+});
 app.use("/listings", listings);
 app.use("/listings/:id/reviews", reviews);
 app.use("/",user);
@@ -109,6 +113,5 @@ app.use((req, res) => {
       res.status(404).send("<h1>Oops! Page not found.</h1>");
 });
 
-app.listen(8080, () => {
-    console.log("server is listening to port 8080");
-})
+const port = process.env.PORT || 8080;
+app.listen(port, () => console.log(`Server running on port ${port}`));
